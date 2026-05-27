@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>그림자 교실 탈출: 분수의 나눗셈</title>
+  <title>그림자 교실 탈출: 구구단 20문제 승부</title>
   <style>
     :root {
-      --bg: #070812;
       --panel: rgba(18, 22, 39, 0.9);
       --panel-light: rgba(34, 40, 68, 0.93);
       --text: #f3f5ff;
@@ -185,22 +184,13 @@
       box-shadow: 0 16px 36px rgba(159, 122, 234, 0.26);
     }
 
-    button:active { transform: translateY(0); }
-
-    button.secondary {
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: none;
-    }
-
     button.choice-btn {
       color: var(--text);
       background: rgba(255, 255, 255, 0.085);
       border: 1px solid rgba(255, 255, 255, 0.14);
       box-shadow: none;
       text-align: left;
-      font-size: clamp(19px, 3vw, 26px);
+      font-size: clamp(22px, 4vw, 34px);
       display: flex;
       justify-content: space-between;
       gap: 12px;
@@ -242,11 +232,11 @@
     }
 
     .question {
-      font-size: clamp(30px, 5.3vw, 58px);
+      font-size: clamp(48px, 9vw, 86px);
       font-weight: 1000;
       color: #fff;
       text-shadow: 0 0 28px rgba(94, 234, 212, 0.22);
-      line-height: 1.2;
+      line-height: 1.1;
     }
 
     .problem-type {
@@ -254,32 +244,6 @@
       font-weight: 900;
       margin-bottom: 8px;
       font-size: 15px;
-    }
-
-    .fraction {
-      display: inline-grid;
-      grid-template-rows: auto auto;
-      align-items: center;
-      justify-items: center;
-      vertical-align: middle;
-      margin: 0 0.12em;
-      line-height: 1;
-    }
-
-    .fraction .top {
-      border-bottom: 0.08em solid currentColor;
-      padding: 0 0.16em 0.08em;
-    }
-
-    .fraction .bottom {
-      padding: 0.08em 0.16em 0;
-    }
-
-    .mixed {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.08em;
-      vertical-align: middle;
     }
 
     .countdown {
@@ -305,15 +269,6 @@
       margin-top: 12px;
     }
 
-    .message {
-      min-height: 28px;
-      color: var(--danger);
-      font-weight: 900;
-      text-align: center;
-      margin-top: 12px;
-      word-break: keep-all;
-    }
-
     .progress-dots {
       display: flex;
       flex-wrap: wrap;
@@ -322,8 +277,8 @@
     }
 
     .dot {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.14);
       border: 1px solid rgba(255, 255, 255, 0.16);
@@ -411,14 +366,14 @@
       .top-bar { flex-direction: column; align-items: flex-start; }
       .scene { grid-template-columns: 1fr; }
       .story-card, .puzzle-card { padding: 22px; }
-      button.choice-btn { font-size: 20px; }
+      button.choice-btn { font-size: 24px; }
     }
   </style>
 </head>
 <body>
   <main class="game-wrap" id="gameWrap">
     <div class="top-bar">
-      <div class="badge" id="stageBadge">🌙 그림자 교실 탈출</div>
+      <div class="badge" id="stageBadge">🌙 그림자 교실 탈출: 구구단 20문제 승부</div>
       <div class="timer" id="totalTimer">00:00.0</div>
     </div>
 
@@ -432,7 +387,7 @@
         icon: "🏫",
         story: [
           "방과 후, 교실에 혼자 남은 순간 복도 끝 시계가 거꾸로 움직이기 시작했습니다.",
-          "칠판에는 하얀 분필 글씨가 천천히 나타납니다. ‘분수의 문을 열어라.’"
+          "칠판에는 하얀 분필 글씨가 천천히 나타납니다. ‘구구단의 문을 열어라.’"
         ],
         puzzleIntro: "칠판의 첫 번째 암호"
       },
@@ -441,7 +396,7 @@
         icon: "🔐",
         story: [
           "교실 문은 살짝 열렸지만, 복도로 나가는 열쇠는 낡은 사물함 안에 있습니다.",
-          "사물함 손잡이에서 차가운 빛이 나더니 분수식 하나가 떠오릅니다."
+          "사물함 손잡이에서 차가운 빛이 나더니 곱셈식 하나가 떠오릅니다."
         ],
         puzzleIntro: "사물함 비밀번호"
       },
@@ -450,7 +405,7 @@
         icon: "🔔",
         story: [
           "책상 밑에서 작은 종소리가 울립니다. 딸랑, 딸랑.",
-          "종에는 글자가 새겨져 있습니다. ‘몫을 찾아야 소리가 멈춘다.’"
+          "종에는 글자가 새겨져 있습니다. ‘곱을 찾아야 소리가 멈춘다.’"
         ],
         puzzleIntro: "종소리를 멈추는 계산"
       },
@@ -468,7 +423,7 @@
         icon: "📚",
         story: [
           "복도 끝 문을 열자 작은 도서관이 나타납니다. 책들이 스스로 페이지를 넘깁니다.",
-          "펼쳐진 책 한가운데에 분수 나눗셈 문제가 적혀 있습니다."
+          "펼쳐진 책 한가운데에 구구단 문제가 적혀 있습니다."
         ],
         puzzleIntro: "스스로 넘어가는 책장"
       },
@@ -477,7 +432,7 @@
         icon: "⏱️",
         story: [
           "벽시계의 초침이 갑자기 멈췄습니다. 교실 안의 공기도 함께 조용해집니다.",
-          "시계를 다시 움직이려면 알맞은 몫을 찾아야 합니다."
+          "시계를 다시 움직이려면 알맞은 곱을 찾아야 합니다."
         ],
         puzzleIntro: "멈춘 시계의 암호"
       },
@@ -486,7 +441,7 @@
         icon: "🪟",
         story: [
           "창문에는 아무도 없는데 숫자 그림자가 비칩니다.",
-          "숫자들은 천천히 모여 하나의 분수 나눗셈 식이 됩니다."
+          "숫자들은 천천히 모여 하나의 구구단 식이 됩니다."
         ],
         puzzleIntro: "창문 위의 계산"
       },
@@ -506,14 +461,14 @@
           "비상구 앞에 길쭉한 그림자가 서 있습니다. 움직이지는 않지만 문을 가리고 있습니다.",
           "그림자는 네 개의 답 중 정확한 하나만 지나가게 해 줍니다."
         ],
-        puzzleIntro: "비상구의 마지막 전 단계"
+        puzzleIntro: "비상구의 암호"
       },
       {
         title: "새벽빛이 들어오는 문",
         icon: "🌅",
         story: [
           "마지막 문 앞입니다. 창문 너머로 희미한 새벽빛이 들어옵니다.",
-          "문고리가 따뜻해졌습니다. 마지막 분수의 나눗셈을 맞히면 그림자 교실을 빠져나갈 수 있습니다."
+          "문고리가 따뜻해졌습니다. 구구단 승부를 끝까지 통과하면 그림자 교실을 빠져나갈 수 있습니다."
         ],
         puzzleIntro: "탈출을 여는 마지막 문제"
       }
@@ -533,73 +488,14 @@
     const stageBadge = document.getElementById("stageBadge");
 
     let currentScene = 0;
+    let currentQuestionNumber = 0;
     let currentAnswerKey = "";
     let currentProblem = null;
-    let gameStarted = false;
     let startTime = 0;
     let totalTimerId = null;
     let puzzleTimerId = null;
     let puzzleStart = 0;
-    let puzzleLimit = 20000;
-    let selectedLimit = 20;
-    let usedProblemKeys = new Set();
-
-    function gcd(a, b) {
-      a = Math.abs(a);
-      b = Math.abs(b);
-      while (b) [a, b] = [b, a % b];
-      return a || 1;
-    }
-
-    function simplify(frac) {
-      if (frac.n === 0) return { n: 0, d: 1 };
-      const sign = frac.n * frac.d < 0 ? -1 : 1;
-      const n = Math.abs(frac.n);
-      const d = Math.abs(frac.d);
-      const g = gcd(n, d);
-      return { n: sign * (n / g), d: d / g };
-    }
-
-    function frac(n, d) {
-      return simplify({ n, d });
-    }
-
-    function divideFractions(a, b) {
-      return simplify({ n: a.n * b.d, d: a.d * b.n });
-    }
-
-    function sameFrac(a, b) {
-      const x = simplify(a);
-      const y = simplify(b);
-      return x.n === y.n && x.d === y.d;
-    }
-
-    function fracKey(f) {
-      const s = simplify(f);
-      return `${s.n}/${s.d}`;
-    }
-
-    function formatFraction(f) {
-      const s = simplify(f);
-      if (s.d === 1) return String(s.n);
-      if (Math.abs(s.n) > s.d) {
-        const whole = Math.trunc(s.n / s.d);
-        const remain = Math.abs(s.n % s.d);
-        if (remain === 0) return String(whole);
-        return `<span class="mixed"><span>${whole}</span><span class="fraction"><span class="top">${remain}</span><span class="bottom">${s.d}</span></span></span>`;
-      }
-      return `<span class="fraction"><span class="top">${s.n}</span><span class="bottom">${s.d}</span></span>`;
-    }
-
-    function formatFractionInline(f) {
-      return formatFraction(f);
-    }
-
-    function natural(n) {
-      return { n, d: 1 };
-    }
-
-    function randomInt(min, max) {
+    let selectedMaxDan = 9; function randomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
@@ -616,35 +512,30 @@
       return ["①", "②", "③", "④"][index];
     }
 
-    function makeDistractors(answer) {
-      const a = simplify(answer);
+    function makeGugudanDistractors(answer) {
       const candidates = [
-        frac(a.n + 1, a.d),
-        frac(Math.max(1, a.n - 1), a.d),
-        frac(a.n, a.d + 1),
-        frac(a.n + a.d, a.d),
-        frac(a.n * 2, a.d),
-        frac(a.n, Math.max(1, a.d - 1)),
-        frac(a.d, a.n || 1)
+        answer + 1, answer - 1,
+        answer + 2, answer - 2,
+        answer + 9, answer - 9,
+        answer + 10, answer - 10
       ];
 
       const unique = [];
-      const keys = new Set([fracKey(a)]);
+      const keys = new Set([String(answer)]);
 
       for (const c of candidates) {
-        const s = simplify(c);
-        if (s.n <= 0 || s.d <= 0) continue;
-        const key = fracKey(s);
+        if (c <= 0) continue;
+        const key = String(c);
         if (!keys.has(key)) {
           keys.add(key);
-          unique.push(s);
+          unique.push(c);
         }
         if (unique.length >= 3) break;
       }
 
       while (unique.length < 3) {
-        const c = frac(randomInt(1, 12), randomInt(2, 12));
-        const key = fracKey(c);
+        const c = randomInt(2, selectedMaxDan) * randomInt(2, 9);
+        const key = String(c);
         if (!keys.has(key)) {
           keys.add(key);
           unique.push(c);
@@ -655,54 +546,29 @@
     }
 
     function makeProblem() {
-      const templates = [
-        () => {
-          const divisor = randomInt(2, 5);
-          const ans = frac(randomInt(1, 5), randomInt(2, 8));
-          const dividend = simplify({ n: ans.n * divisor, d: ans.d });
-          return {
-            type: "분수 ÷ 자연수",
-            expression: `${formatFractionInline(dividend)} ÷ ${divisor}`,
-            answer: ans
-          };
-        },
-        () => {
-          const divisor = frac(randomInt(2, 5), randomInt(3, 8));
-          const ans = frac(randomInt(1, 7), randomInt(2, 9));
-          const dividend = simplify({ n: ans.n * divisor.n, d: ans.d * divisor.d });
-          return {
-            type: "분수 ÷ 분수",
-            expression: `${formatFractionInline(dividend)} ÷ ${formatFractionInline(divisor)}`,
-            answer: ans
-          };
-        },
-        () => {
-          const divisor = frac(randomInt(2, 7), randomInt(2, 9));
-          const ans = frac(randomInt(6, 16), randomInt(2, 7));
-          const dividend = simplify({ n: ans.n * divisor.n, d: ans.d * divisor.d });
-          return {
-            type: "대분수 또는 가분수가 나오는 나눗셈",
-            expression: `${formatFractionInline(dividend)} ÷ ${formatFractionInline(divisor)}`,
-            answer: ans
-          };
-        }
-      ];
+      for (let attempt = 0; attempt < 120; attempt++) {
+        const a = randomInt(2, selectedMaxDan);
+        const b = randomInt(2, 9);
+        const answer = a * b;
+        const key = `${a}x${b}`;
 
-      for (let attempt = 0; attempt < 80; attempt++) {
-        const maker = templates[Math.min(currentScene % templates.length, templates.length - 1)];
-        const problem = maker();
-        const key = problem.expression.replace(/<[^>]*>/g, "") + "=" + fracKey(problem.answer);
         if (!usedProblemKeys.has(key)) {
           usedProblemKeys.add(key);
-          const distractors = makeDistractors(problem.answer);
-          const choices = shuffle([problem.answer, ...distractors]).map((item, index) => ({
+          const choices = shuffle([answer, ...makeGugudanDistractors(answer)]).map((item, index) => ({
             label: choiceLabel(index),
             value: item,
-            html: formatFraction(item),
-            isAnswer: sameFrac(item, problem.answer)
+            html: String(item),
+            isAnswer: item === answer
           }));
           const answerChoice = choices.find(c => c.isAnswer);
-          return { ...problem, choices, answerKey: answerChoice.label };
+
+          return {
+            type: "구구단",
+            expression: `${a} × ${b}`,
+            answer,
+            choices,
+            answerKey: answerChoice.label
+          };
         }
       }
 
@@ -745,8 +611,8 @@
     }
 
     function renderDots() {
-      return `<div class="progress-dots">${scenes.map((_, index) => {
-        const cls = index < currentScene ? "dot done" : index === currentScene ? "dot now" : "dot";
+      return `<div class="progress-dots">${Array.from({ length: totalQuestions }).map((_, index) => {
+        const cls = index < currentQuestionNumber ? "dot done" : index === currentQuestionNumber ? "dot now" : "dot";
         return `<span class="${cls}" title="${index + 1}번 문제"></span>`;
       }).join("")}</div>`;
     }
@@ -755,55 +621,18 @@
       stopPuzzleTimer();
       stopTotalTimer();
       currentScene = 0;
-      gameStarted = false;
+      currentQuestionNumber = 0;
       usedProblemKeys.clear();
       totalTimer.textContent = "00:00.0";
-      setStageBadge("🌙 그림자 교실 탈출: 분수의 나눗셈");
+      setStageBadge("🌙 그림자 교실 탈출: 구구단 20문제 승부");
 
       game.innerHTML = `
         <div class="scene fade-in">
           <div class="story-card">
             <h1>그림자 교실 탈출</h1>
-            <p>6학년 분수의 나눗셈을 연습하는 객관식 방탈출 게임입니다.</p>
-            <p>총 10개의 문을 지나야 탈출할 수 있습니다. 문제를 틀리거나 시간이 지나면 으스스한 메시지와 함께 처음 장면으로 돌아갑니다.</p>
-            <div class="small-setting">
-              <label>
-                문제 제한 시간
-                <select id="limitSelect">
-                  <option value="15">15초</option>
-                  <option value="20" selected>20초</option>
-                  <option value="30">30초</option>
-                  <option value="45">45초</option>
-                </select>
-              </label>
-            </div>
-            <div class="choices">
-              <button onclick="startGame()">탈출 시작하기</button>
-            </div>
-          </div>
-          <div class="puzzle-card">
-            <div class="big-icon">🕯️</div>
-            <p style="text-align:center;">칠판 위 촛불이 흔들립니다.<br />문을 열 암호는 모두 분수의 나눗셈 속에 숨어 있습니다.</p>
-            <p style="text-align:center; color: var(--warning); font-weight: 900;">총 10문제 · 객관식 4지선다</p>
-          </div>
-        </div>
-      `;
-    }
-
-    function startGame() {
-      selectedLimit = Number(document.getElementById("limitSelect").value);
-      puzzleLimit = selectedLimit * 1000;
-      currentScene = 0;
-      gameStarted = true;
-      usedProblemKeys.clear();
-      startTotalTimer();
-      renderScene();
-    }
-
-    function renderScene() {
-      stopPuzzleTimer();
-      const scene = scenes[currentScene];
-      setStageBadge(`문 ${currentScene + 1} / ${scenes.length}`);
+            <p>구구단 실력을 겨루는 객관식 방탈출 게임입니다.</p>
+            <p>총 20문제를 모두 맞히면 탈출 성공입니다. 문제를 틀리면 으스스한 메시지와 함께 처음 장면으로 돌아갑니다.</p>
+   <p>총 20문제를 모두 맞히면 탈출 성공입니다. 문제를 틀리면 으스스한 메시지와 함께 처음 장면으로 돌아갑니다.</p>0문제 승부 시작하기</<div class="choices">  setStageBadge(`문제 ${currentQuestionNumber + 1} / ${totalQuestions}`);
 
       game.innerHTML = `
         <div class="scene fade-in">
@@ -812,18 +641,11 @@
             ${scene.story.map(line => `<p>${line}</p>`).join("")}
             ${renderDots()}
             <div class="choices">
-              <button onclick="renderPuzzle()">암호 문제 풀기</button>
+              <button onclick="renderPuzzle()">구구단 암호 풀기</button>
             </div>
           </div>
-          <div class="puzzle-card">
-            <div class="big-icon">${scene.icon}</div>
-            <p style="text-align:center;">천천히 숨을 고르고, 다음 문으로 가는 분수 암호를 풀어 보세요.</p>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderPuzzle() {
+          <div class="puzzle-selectedMaxDan = 9;
+      currentScene = 0;erPuzzle() {
       const scene = scenes[currentScene];
       currentProblem = makeProblem();
       currentAnswerKey = currentProblem.answerKey;
@@ -833,19 +655,16 @@
           <div class="story-card">
             <h2>${scene.title}</h2>
             <p>${scene.puzzleIntro}</p>
-            <p>제한 시간 안에 알맞은 답을 고르세요. 오답을 고르거나 시간이 지나면 처음부터 다시 시작합니다.</p>
+            <p>알맞은 곱을 고르세요. 오답을 고르면 처음부터 다시 시작합니다.</p>
             ${renderDots()}
           </div>
           <div class="puzzle-card">
-            <div class="puzzle-title">FRACTION DIVISION LOCK</div>
+            <div class="puzzle-title">MULTIPLICATION LOCK</div>
             <div class="question-box">
               <div class="problem-type">${currentProblem.type}</div>
               <div class="question">${currentProblem.expression}</div>
             </div>
-            <div class="countdown" aria-label="남은 시간">
-              <div class="countdown-fill" id="countdownFill"></div>
-            </div>
-            <div class="choices">
+                        <div class="choices">
               ${currentProblem.choices.map(choice => `
                 <button class="choice-btn" onclick="checkAnswer('${choice.label}')">
                   <span>${choice.label}</span>
@@ -853,8 +672,7 @@
                 </button>
               `).join("")}
             </div>
-            <div class="helper">제한 시간: ${selectedLimit}초 · ${currentScene + 1}/${scenes.length}번 문제</div>
-            <div class="message" id="message"></div>
+            <div class="helper">2~9단 · ${cu
           </div>
         </div>
       `;
@@ -862,26 +680,14 @@
       startPuzzleTimer();
     }
 
-    function startPuzzleTimer() {
-      stopPuzzleTimer();
-      puzzleStart = performance.now();
-      const fill = document.getElementById("countdownFill");
-
-      puzzleTimerId = setInterval(() => {
-        const elapsed = performance.now() - puzzleStart;
-        const remaining = Math.max(0, puzzleLimit - elapsed);
-        const percent = (remaining / puzzleLimit) * 100;
-        if (fill) fill.style.width = `${percent}%`;
-
-        if (remaining <= 0) failAndReset("시간이 다 되었습니다.");
-      }, 60);
+    function startrn;
     }
 
-    function checkAnswer(label) {
-      if (label === currentAnswerKey) {
+    fun<p>알맞은 곱을 고르세요. 오답을 고르면 처음부터 다시 시작합니다.</p>Key) {
         stopPuzzleTimer();
-        currentScene += 1;
-        if (currentScene >= scenes.length) renderClear();
+        currentQuestionNumber += 1;
+        currentScene = currentQuestionNumber % scenes.length;
+        if (currentQuestionNumber >= totalQuestions) renderClear();
         else renderCorrectTransition();
       } else {
         failAndReset("정답이 아닙니다.");
@@ -889,12 +695,7 @@
     }
 
     function failAndReset(reason) {
-      stopPuzzleTimer();
-      gameWrap.classList.remove("shake");
-      void gameWrap.offsetWidth;
-      gameWrap.classList.add("shake");
-
-      const spooky = spookyMessages[Math.floor(Math.random() * spookyMessages.length)];
+      stopPuzzlndom() * spookyMessages.length)];
       setStageBadge("처음으로 돌아갑니다");
 
       game.innerHTML = `
@@ -902,26 +703,13 @@
           <div class="big-icon">🌫️</div>
           <h2>${reason}</h2>
           <p>${spooky}</p>
-          <p style="color: var(--warning); font-weight: 900;">정답은 ${currentAnswerKey}번, ${currentProblem ? formatFraction(currentProblem.answer) : "?"} 이었습니다.</p>
-          <div class="choices" style="max-width: 380px; margin: 20px auto 0; width: 100%;">
-            <button class="danger" onclick="renderStart()">처음 장면으로 돌아가기</button>
-          </div>
-        </div>
-      `;
-
-      setTimeout(() => renderStart(), 3800);
+          <p style="color: var(--warning); font-weight: 900;">정답은 ${currentAnswerKey}번, ${currentProblem ? currentProblem<div class="helper">2~9단 · ${currentQuestionNumber + 1}/${totalQuestions}번 문제</div>width: 100%;">
+            <button class="rt()">처음 장면으function startPuzzleTimer() {
+      return;
     }
 
-    function renderCorrectTransition() {
-      setStageBadge(`문 ${currentScene + 1}로 이동 중`);
-      game.innerHTML = `
-        <div class="ending fade-in">
-          <div class="big-icon">✨</div>
-          <h2>문이 조용히 열렸습니다.</h2>
-          <p>정답입니다. 하지만 아직 ${scenes.length - currentScene}개의 문이 남아 있습니다.</p>
-          ${renderDots()}
-          <div class="choices" style="max-width: 380px; margin: 20px auto 0; width: 100%;">
-            <button onclick="renderScene()">다음 장면으로</button>
+    function checkAnsweruto 0; width: 100%;">
+            <button onclick="renderScene()">다음 문제로</button>
           </div>
         </div>
       `;
@@ -939,7 +727,7 @@
         <div class="ending fade-in">
           <div class="big-icon">🌅</div>
           <h2>탈출 성공!</h2>
-          <p>10개의 분수 암호가 모두 풀렸습니다. 교실 안의 그림자가 햇빛 속으로 조용히 사라졌습니다.</p>
+          <p>20개의 구구단 암호가 모두 풀렸습니다. 교실 안의 그림자가 햇빛 속으로 조용히 사라졌습니다.</p>
           <div class="clear-time">${clearText}</div>
           <div class="rank-note">이 시간을 기록하고 친구들과 비교해 보세요!</div>
           <div class="choices" style="max-width: 380px; margin: 26px auto 0; width: 100%;">
