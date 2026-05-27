@@ -3,64 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>나의 첫 바이브 코딩</title>
+    <title>신나는 구구단 퀴즈!</title>
     <style>
-        /* 배경 및 전체 레이아웃 디자인 (CSS) */
         body {
             font-family: 'Malgun Gothic', sans-serif;
-            background-color: #f0f4f8;
+            background-color: #eef2f7;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
         }
-        /* 가운데 카드 디자인 */
-        .card {
+        .game-container {
             background-color: white;
-            padding: 30px 40px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             text-align: center;
+            width: 350px;
         }
-        h1 {
-            color: #4a5568;
-            margin-bottom: 20px;
+        .score-board {
+            font-size: 18px;
+            color: #718096;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
-        /* 파스텔톤 버튼 디자인 */
-        button {
-            background-color: #a3bffa;
+        .question {
+            font-size: 48px;
+            font-weight: bold;
             color: #2d3748;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s;
+            margin: 20px 0;
+            background-color: #f7fafc;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px dashed #cbd5e0;
         }
-        button:hover {
-            background-color: #7f9cf5;
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn-option {
+            background-color: #bee3f8;
+            color: #2b6cb0;
+            border: none;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-option:hover {
+            background-color: #90cdf4;
+            transform: scale(1.03);
+        }
+        .result-message {
+            height: 30px;
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1 id="message">Hello World!</h1>
-        <button onclick="changeMessage()">클릭해보세요</button>
+<div class="game-container">
+    <div class="score-board">맞춘 개수: <span id="score">0</span>개</div>
+    <div class="question" id="question">2 × 3 = ?</div>
+    
+    <div class="options-grid">
+        <button class="btn-option" onclick="checkAnswer(this)" id="opt0">4</button>
+        <button class="btn-option" onclick="checkAnswer(this)" id="opt1">5</button>
+        <button class="btn-option" onclick="checkAnswer(this)" id="opt2">6</button>
+        <button class="btn-option" onclick="checkAnswer(this)" id="opt3">7</button>
     </div>
+    
+    <div class="result-message" id="result"></div>
+</div>
 
-    <script>
-        /* 버튼을 누르면 작동하는 기능 (JavaScript) */
-        function changeMessage() {
-            const messageElement = document.getElementById('message');
-            if (messageElement.innerText === 'Hello World!') {
-                messageElement.innerText = '반가워요! 첫 웹사이트 성공 완료! 🎉';
-            } else {
-                messageElement.innerText = 'Hello World!';
+<script>
+    let score = 0;
+    let correctAnswer = 0;
+
+    // 게임 시작 시 첫 문제 생성
+    makeQuestion();
+
+    function makeQuestion() {
+        // 결과 메시지 초기화
+        document.getElementById('result').innerText = '';
+        
+        // 2단부터 9단까지 무작위 숫자 2개 생성
+        const num1 = Math.floor(Math.random() * 8) + 2; 
+        const num2 = Math.floor(Math.random() * 9) + 1; 
+        correctAnswer = num1 * num2;
+
+        // 화면에 문제 표시
+        document.getElementById('question').innerText = `${num1} × ${num2} = ?`;
+
+        // 오답 후보들 만들기
+        let options = [correctAnswer];
+        while(options.length < 4) {
+            // 정답 주변의 그럴싸한 오답 생성
+            let wrong = correctAnswer + (Math.floor(Math.random() * 11) - 5);
+            if(wrong > 0 && !options.includes(wrong)) {
+                options.push(wrong);
             }
         }
-    </script>
+
+        // 보기 무작위로 섞기 (셔플)
+        options.sort(() => Math.random() - 0.5);
+
+        // 버튼에 보기 글자 넣기
+        for(let i = 0; i < 4; i++) {
+            document.getElementById(`opt${i}`).innerText = options[i];
+        }
+    }
+
+    function checkAnswer(button) {
+        const selectedAnswer = parseInt(button.innerText);
+        const resultElement = document.getElementById('result');
+
+        if(selectedAnswer === correctAnswer) {
+            score++;
+            document.getElementById('score').innerText = score;
+            resultElement.style.color = '#38a169'; // 초록색
+            resultElement.innerText = '정답입니다! 🎉';
+            
+            // 1초 뒤에 다음 문제로 넘어가기
+            setTimeout(makeQuestion, 1000);
+        } else {
+            resultElement.style.color = '#e53e3e'; // 빨간색
+            resultElement.innerText = '아쉬워요! 다시 생각해보세요! 🤔';
+        }
+    }
+</script>
 
 </body>
 </html>
