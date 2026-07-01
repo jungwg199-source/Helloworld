@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>초등 주식투자 게임</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Arial", "Noto Sans KR", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f3f6fb;
+      color: #222;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2f80ed, #56ccf2);
+      color: white;
+      padding: 24px 16px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .card-title {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .card-value {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .game-area {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 12px;
+      background: white;
+    }
+
+    th, td {
+      padding: 12px 8px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background: #eef4ff;
+      font-size: 14px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .stock-name {
+      font-weight: bold;
+    }
+
+    .risk {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: white;
+    }
+
+    .risk-low { background: #27ae60; }
+    .risk-mid { background: #f2994a; }
+    .risk-high { background: #eb5757; }
+
+    .up {
+      color: #e63946;
+      font-weight: bold;
+    }
+
+    .down {
+      color: #2f80ed;
+      font-weight: bold;
+    }
+
+    .same {
+      color: #666;
+      font-weight: bold;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 9px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      background: #2f80ed;
+      color: white;
+      transition: 0.15s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.92;
+    }
+
+    button:disabled {
+      background: #bbb;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .sell-btn {
+      background: #27ae60;
+    }
+
+    .danger-btn {
+      background: #eb5757;
+    }
+
+    .next-btn {
+      width: 100%;
+      font-size: 18px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .reset-btn {
+      width: 100%;
+      background: #555;
+      margin-bottom: 12px;
+    }
+
+    .log {
+      height: 260px;
+      overflow-y: auto;
+      background: #111827;
+      color: #f9fafb;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .log p {
+      margin: 0 0 8px;
+    }
+
+    .help {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #444;
+    }
+
+    .goal {
+      background: #fff8e1;
+      border-left: 6px solid #f2c94c;
+    }
+
+    .ending {
+      display: none;
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .ending h2 {
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 800px) {
+      .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .game-area {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        font-size: 13px;
+      }
+
+      th, td {
+        padding: 8px 4px;
+      }
+
+      button {
+        padding: 7px 8px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>주식투자 체험 게임</h1>
+    <p>1,000만 원으로 주식을 사고팔며 100일 동안 자산을 불려 보세요!</p>
+  </header>
+
+  <main>
+    <section class="dashboard">
+      <div class="card">
+        <div class="card-title">현재 날짜</div>
+        <div class="card-value"><span id="day">1</span>일차</div>
+      </div>
+      <div class="card">
+        <div class="card-title">보유 현금</div>
+        <div class="card-value" id="cash">10,000,000원</div>
+      </div>
+      <div class="card">
+        <div class="card-title">주식 평가금액</div>
+        <div class="card-value" id="stockValue">0원</div>
+      </div>
+      <div class="card">
+        <div class="card-title">총 자산</div>
+        <div class="card-value" id="totalAsset">10,000,000원</div>
+      </div>
+    </section>
+
+    <section class="game-area">
+      <div class="card">
+        <h2>주식 목록</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>회사</th>
+              <th>가격</th>
+              <th>변화</th>
+              <th>위험도</th>
+              <th>보유</th>
+              <th>1주 사기</th>
+              <th>10주 사기</th>
+              <th>1주 팔기</th>
+              <th>10주 팔기</th>
+            </tr>
+          </thead>
+          <tbody id="stockTable"></tbody>
+        </table>
+      </div>
+
+      <aside>
+        <button class="next-btn" onclick="nextDay()">다음 날로 가기</button>
+        <button class="reset-btn" onclick="resetGame()">처음부터 다시하기</button>
+
+        <div class="card goal">
+          <h2>게임 목표</h2>
+          <div class="help">
+            100일 동안 투자해서 총 자산을 늘려 보세요.<br>
+            위험도가 높은 주식은 크게 오를 수도 있지만, 크게 떨어질 수도 있어요.
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>투자 기록</h2>
+          <div class="log" id="log"></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="ending" id="ending">
+      <h2 id="endingTitle"></h2>
+      <p id="endingText"></p>
+    </section>
+  </main>
+
+  <script>
+    let day = 1;
+    let cash = 10000000;
+    const maxDay = 100;
+
+    const stocks = [
+      {
+        name: "삼성전자",
+        price: 80000,
+        startPrice: 80000,
+        risk: "보통",
+        volatility: 8,
+        owned: 0,
+        description: "한국의 대표 전자 회사"
+      },
+      {
+        name: "하이닉스",
+        price: 180000,
+        startPrice: 180000,
+        risk: "높음",
+        volatility: 16,
+        owned: 0,
+        description: "반도체를 만드는 회사"
+      },
+      {
+        name: "엔비디아",
+        price: 140000,
+        startPrice: 140000,
+        risk: "높음",
+        volatility: 22,
+        owned: 0,
+        description: "AI 반도체로 유명한 회사"
+      },
+      {
+        name: "구글",
+        price: 190000,
+        startPrice: 190000,
+        risk: "보통",
+        volatility: 10,
+        owned: 0,
+        description: "검색과 유튜브로 유명한 회사"
+      },
+      {
+        name: "마이크로소프트",
+        price: 520000,
+        startPrice: 520000,
+        risk: "보통",
+        volatility: 9,
+        owned: 0,
+        description: "윈도우와 클라우드 회사"
+      },
+      {
+        name: "테슬라",
+        price: 300000,
+        startPrice: 300000,
+        risk: "높음",
+        volatility: 25,
+        owned: 0,
+        description: "전기차와 로봇 회사"
+      },
+      {
+        name: "네이버",
+        price: 220000,
+        startPrice: 220000,
+        risk: "보통",
+        volatility: 12,
+        owned: 0,
+        description: "검색과 웹툰으로 유명한 회사"
+      },
+      {
+        name: "카카오",
+        price: 60000,
+        startPrice: 60000,
+        risk: "높음",
+        volatility: 18,
+        owned: 0,
+        description: "메신저와 콘텐츠 회사"
+      },
+      {
+        name: "애플",
+        price: 250000,
+        startPrice: 250000,
+        risk: "낮음",
+        volatility: 6,
+        owned: 0,
+        description: "아이폰과 맥을 만드는 회사"
+      }
+    ];
+
+    const events = [
+      "뉴스: 사람들이 건강한 간식을 많이 찾기 시작했어요.",
+      "뉴스: 새 학기 준비로 문구 판매가 늘었어요.",
+      "뉴스: 로봇 기술 대회가 열려 관심이 커졌어요.",
+      "뉴스: 새 게임이 인기를 끌고 있어요.",
+      "뉴스: 전체 시장 분위기가 좋아졌어요.",
+      "뉴스: 전체 시장 분위기가 나빠졌어요.",
+      "뉴스: 특별한 소식 없이 조용한 하루였어요."
+    ];
+
+    function formatWon(num) {
+      return Math.round(num).toLocaleString("ko-KR") + "원";
+    }
+
+    function getRiskClass(risk) {
+      if (risk === "낮음") return "risk-low";
+      if (risk === "보통") return "risk-mid";
+      return "risk-high";
+    }
+
+    function getTotalStockValue() {
+      return stocks.reduce((sum, stock) => sum + stock.price * stock.owned, 0);
+    }
+
+    function getTotalAsset() {
+      return cash + getTotalStockValue();
+    }
+
+    function render() {
+      document.getElementById("day").textContent = day;
+      document.getElementById("cash").textContent = formatWon(cash);
+      document.getElementById("stockValue").textContent = formatWon(getTotalStockValue());
+      document.getElementById("totalAsset").textContent = formatWon(getTotalAsset());
+
+      const tbody = document.getElementById("stockTable");
+      tbody.innerHTML = "";
+
+      stocks.forEach((stock, index) => {
+        const changeRate = ((stock.price - stock.startPrice) / stock.startPrice) * 100;
+        let changeClass = "same";
+        let changeText = "0%";
+
+        if (changeRate > 0) {
+          changeClass = "up";
+          changeText = "+" + changeRate.toFixed(1) + "%";
+        } else if (changeRate < 0) {
+          changeClass = "down";
+          changeText = changeRate.toFixed(1) + "%";
+        }
+
+        const buyDisabled = cash < stock.price || day > maxDay ? "disabled" : "";
+        const buyTenDisabled = cash < stock.price * 10 || day > maxDay ? "disabled" : "";
+        const sellDisabled = stock.owned <= 0 || day > maxDay ? "disabled" : "";
+        const sellTenDisabled = stock.owned < 10 || day > maxDay ? "disabled" : "";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <div class="stock-name">${stock.name}</div>
+            <small>${stock.description}</small>
+          </td>
+          <td>${formatWon(stock.price)}</td>
+          <td class="${changeClass}">${changeText}</td>
+          <td><span class="risk ${getRiskClass(stock.risk)}">${stock.risk}</span></td>
+          <td>${stock.owned}주</td>
+          <td><button onclick="buyStock(${index}, 1)" ${buyDisabled}>1주 사기</button></td>
+          <td><button onclick="buyStock(${index}, 10)" ${buyTenDisabled}>10주 사기</button></td>
+          <td><button class="sell-btn" onclick="sellStock(${index}, 1)" ${sellDisabled}>1주 팔기</button></td>
+          <td><button class="sell-btn" onclick="sellStock(${index}, 10)" ${sellTenDisabled}>10주 팔기</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function addLog(message) {
+      const log = document.getElementById("log");
+      const p = document.createElement("p");
+      p.textContent = message;
+      log.prepend(p);
+    }
+
+    function buyStock(index, amount) {
+      const stock = stocks[index];
+      const totalCost = stock.price * amount;
+
+      if (cash >= totalCost) {
+        cash -= totalCost;
+        stock.owned += amount;
+        addLog(`${stock.name} ${amount}주를 샀어요. (-${formatWon(totalCost)})`);
+        render();
+      }
+    }
+
+    function sellStock(index, amount) {
+      const stock = stocks[index];
+      const totalPrice = stock.price * amount;
+
+      if (stock.owned >= amount) {
+        cash += totalPrice;
+        stock.owned -= amount;
+        addLog(`${stock.name} ${amount}주를 팔았어요. (+${formatWon(totalPrice)})`);
+        render();
+      }
+    }
+
+    function nextDay() {
+      if (day >= maxDay) {
+        finishGame();
+        return;
+      }
+
+      day += 1;
+
+      const todayEvent = events[Math.floor(Math.random() * events.length)];
+      addLog(`${day}일차 ${todayEvent}`);
+
+      stocks.forEach(stock => {
+        const randomChange = (Math.random() * stock.volatility * 2) - stock.volatility;
+        const marketMood = Math.random();
+
+        let finalChange = randomChange;
+
+        if (marketMood > 0.85) {
+          finalChange += 5;
+        } else if (marketMood < 0.15) {
+          finalChange -= 5;
+        }
+
+        stock.price = Math.max(1000, Math.round(stock.price * (1 + finalChange / 100) / 1000) * 1000);
+      });
+
+      render();
+
+      if (day === maxDay) {
+        finishGame();
+      }
+    }
+
+    function finishGame() {
+      const ending = document.getElementById("ending");
+      const title = document.getElementById("endingTitle");
+      const text = document.getElementById("endingText");
+      const total = getTotalAsset();
+      const profit = total - 10000000;
+      const profitRate = (profit / 10000000) * 100;
+
+      ending.style.display = "block";
+
+      if (profit > 0) {
+        title.textContent = "투자 성공!";
+        text.textContent = `최종 자산은 ${formatWon(total)}입니다. ${formatWon(profit)}을 벌었어요. 수익률은 약 ${profitRate.toFixed(1)}%예요.`;
+      } else if (profit < 0) {
+        title.textContent = "투자 손실!";
+        text.textContent = `최종 자산은 ${formatWon(total)}입니다. ${formatWon(Math.abs(profit))}을 잃었어요. 수익률은 약 ${profitRate.toFixed(1)}%예요.`;
+      } else {
+        title.textContent = "본전!";
+        text.textContent = "최종 자산은 처음과 같아요. 돈을 잃지 않은 것도 중요한 투자 결과예요.";
+      }
+
+      addLog("게임이 끝났어요. 최종 자산을 확인해 보세요!");
+      render();
+    }
+
+    function resetGame() {
+      day = 1;
+      cash = 10000000;
+
+      stocks.forEach(stock => {
+        stock.price = stock.startPrice;
+        stock.owned = 0;
+      });
+
+      document.getElementById("log").innerHTML = "";
+      document.getElementById("ending").style.display = "none";
+
+      addLog("게임을 시작했어요. 1,000만 원으로 투자해 보세요!");
+      render();
+    }
+
+    resetGame();
+  </script>
+</body>
+</html>
